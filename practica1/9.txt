@@ -1,0 +1,26 @@
+ORG 1000H
+
+CADENA DB "TheGame"
+F DB 0
+
+ORG 3000h
+
+CONCAR: MOV AL, [BX]
+        CMP AL, 0   ; SI AL == 0
+        JZ FIN
+        INC DL
+        INC BX  ; PASAMOS AL SIGUIENTE CARACTER
+        JMP CONCAR
+FIN:    RET
+        
+ORG 2000H 
+
+MOV BX, OFFSET CADENA
+MOV DL, 0
+CALL CONCAR
+
+HLT
+
+END
+
+

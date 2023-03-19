@@ -1,0 +1,43 @@
+ORG 1000H
+
+NUM1 DW 105
+NUM2 DW 89
+
+
+ORG 3000H
+
+SWAP:PUSH AX
+     PUSH BX
+     PUSH CX
+     PUSH DX
+     MOV BX, SP
+     ADD BX, 10
+     PUSH BX
+     MOV BX, [BX] ; DIRECCION DE NUM2
+     MOV CX, BX   ; CX = DIR NUM2
+     MOV AX, [BX] ; AX = VALOR DE  NUM2
+     POP BX       ; RECUPERO EL SP + 2    
+     ADD BX, 2    ; SP + 4
+     MOV BX, [BX] ; DIR DE NUM1
+     MOV DX, [BX] ; DX = VALOR NUM1
+     MOV [BX] , AX; DIR NUM1 = VALOR NUM2
+     MOV BX, CX   ; BX = DIR NUM2
+     MOV [BX], DX ; DIR NUM2 = VALOR NUM1 
+     POP DX
+     POP CX
+     POP BX
+     POP AX
+     RET
+
+ORG 2000H
+
+MOV AX, OFFSET NUM1
+PUSH AX
+MOV AX, OFFSET NUM2
+PUSH AX
+CALL SWAP
+POP AX
+POP AX
+HLT
+
+END
