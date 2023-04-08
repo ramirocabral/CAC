@@ -1,0 +1,17 @@
+ORG 1000H
+
+COMIENZO DW 00H
+
+ORG 2000H
+
+      MOV BX, OFFSET COMIENZO
+      MOV CX, [BX]
+      MOV AL, 1
+LAZO: INC CX
+      MOV [BX], CX
+      INT 7
+      MOV CX, [BX]
+      CMP CX , 127
+      JNZ LAZO
+      INT 0
+END
