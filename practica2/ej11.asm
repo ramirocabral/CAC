@@ -1,0 +1,44 @@
+PIC EQU 20H
+EOI EQU 20H
+N_F10 EQU 10
+
+ORG 40
+
+    IP_F10 DW RUT_F10
+
+ORG 1000H
+
+LETRA DB "A"
+
+ORG 2000H
+
+    CLI
+    MOV AL, 0FEH
+    OUT PIC+1, AL ; PIC: registro IMR
+    MOV AL, N_F10
+    OUT PIC+4, AL ; PIC: registro INT0
+    MOV DX, 0
+    MOV BX, OFFSET LETRA
+    STI
+LAZ:CMP DH, 0FFH
+    JZ IMP
+    INC BYTE PTR [BX]
+    CMP BYTE PTR [BX], 90
+    JNZ LAZ
+    SUB BYTE PTR [BX], 45
+    JMP LAZ
+
+IMP:MOV AL,1
+    INT 7
+    INT 0
+    HLT
+
+ORG 3000H
+
+    RUT_F10: PUSH AX
+    MOV DH, 0FFH
+    MOV AL, EOI
+    OUT EOI, AL ; PIC: registro EOI
+    POP AX
+    IRET
+    END
