@@ -1,0 +1,62 @@
+PIC EQU 20H
+TIMER EQU 10H
+PIO EQU 30H
+N_CLK EQU 11
+
+ORG 44
+    IP_CLK DW RUT_CLK
+
+ORG 1000H
+    INICIO DB 1
+
+
+ORG 3000H
+
+RUT_CLK:MOV AL, INICIO
+        CMP CL, 0  ; SI HAY QUE ROTAR A LA DERECHA
+        JNZ SEGUIR
+        CALL ROT_DER
+        JMP LUCES
+SEGUIR: MOV CH, 1  ; ROTAMOS UNA VEZ HACIA LA IZQUIERDA
+        CALL ROT_IZQ
+LUCES:  OUT PIO+1, AL ;MANDAMOS EL RESULTADO AL PB
+        MOV AL, 0
+        OUT TIMER, AL ; RESETEAMOS CONT
+        MOV AL, 20H
+        OUT PIC, AL   ; 20H AL EOI
+        IRET
+
+ROT_IZQ:ADD AL, AL
+        JNC SEG
+        INC AL     ; SI HAY CARRY
+SEG:    DEC CH
+        JNZ ROT_IZQ
+        CMP AL, 128
+        JNZ FINAL
+        MOV CL, 0  ; HAY QUE EMPEZAR A ROTAR A LA DERECHA
+FINAL:  MOV INICIO,AL
+        RET
+
+ROT_DER:MOV CH, 7
+        CALL ROT_IZQ
+        CMP AL, 1
+        JNZ FIN
+        MOV CL, 1  ; HAY QUE EMPEZAR A ROTAR A LA IZQUIERDA
+FIN:    RET
+
+ORG 2000H
+    CLI
+    MOV AL, 0FDH   ; configuramos el IMR
+    OUT PIC+1, AL
+    MOV AL, N_CLK  ; configuramos el timer
+    OUT PIC+5, AL
+    MOV AL, 1
+    OUT TIMER+1,AL ; ponemos en 1 COMP
+    MOV AL,0
+    OUT PIO+3, AL  ; CB todo en 0
+    OUT PIO+1, AL  ; PB todo en 0
+    OUT TIMER, AL  ; ponemos en 0 CONT
+    MOV CL, 1
+    STI
+LAZ:JMP LAZ 
+    END

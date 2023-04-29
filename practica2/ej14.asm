@@ -33,7 +33,7 @@ IMP:INT 7            ; AL = 2
     MOV SEG2, 30H
     MOV AL, 0FEH     ; desabilitamos las interrupciones del timer
     OUT PIC+1, AL
-FIN:MOV AL, 0
+FIN:MOV AL, 0        ; ponemos cont en 0
     OUT TIMER, AL
     MOV AL, EOI
     OUT PIC, AL      ; termina la interrupcion
@@ -43,7 +43,7 @@ FIN:MOV AL, 0
 
 RUT_F10: PUSH AX     ;-----------F10------------
     IN AL, PIC+1     ; interrupciones del IMR
-    CMP AL, 0FCH     ; si esta habilitado el timer
+    CMP AL, 0FCH     ; si esta habilitado el timer:
     JZ DST
     MOV AL, 0FCH     ; habilitamos las interrupciones del timer
     OUT PIC+1, AL
