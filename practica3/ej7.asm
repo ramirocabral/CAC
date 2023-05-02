@@ -6,13 +6,20 @@ ORG 1000H
 MSJ DB "THE GRAND WAZOO"
 FIN DB ?
 
-ORG 2000H
+ORG 3000H
+
+INI_HND:PUSH AX
     IN AL, HAND+1
-    AND AL, 7FH
+    AND AL, 127         ;bit 7 de Estado en 0
     OUT HAND+1, AL
+    POP AX
+    RET
+
+ORG 2000H
+    CALL INI_HND        ;inicializamos el HANDSHAKE
     MOV BX, OFFSET MSJ
     MOV CL, OFFSET FIN - OFFSET MSJ
-PLL:IN AL, HAND+1
+PLL:IN AL, HAND+1       ;polling
     AND AL, 1
     JNZ PLL
     MOV AL,[BX]
@@ -20,5 +27,5 @@ PLL:IN AL, HAND+1
     INC BX
     DEC CL
     JNZ PLL
-    HLT
+    INT 0
     END

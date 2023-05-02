@@ -62,10 +62,11 @@ PLL:IN AL, PIO
     AND AL, 1
     JNZ PLL
     MOV AL, [BX]
-    OUT PIO+1, AL
-    CALL STR_EN0
+    OUT PIO+1, AL	;PB -> dato a imprimir   
+    CALL STR_EN0	;pulso
     CALL STR_EN1
     INC BX
     DEC CL
     JNZ PLL
-END
+	INT 0
+END2
