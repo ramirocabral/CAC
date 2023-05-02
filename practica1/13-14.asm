@@ -24,7 +24,7 @@ VOCALES:  MOV CH, [BX]   ; CH = CARACTER A ANALIZAR
           MOV BX, OFFSET TABLA
           CALL ES_VOCAL
           POP BX
-          CMP AL, 0FFH
+          CMP AL, 0FFH     ;si es vocal
           JNZ SEGUIR
           INC AH           ; si era vocal, sumamos uno a ah
 SEGUIR:   INC BX           ; pasamos a la siguiente letra de la palabvra

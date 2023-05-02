@@ -18,9 +18,9 @@ ORG 2000H
     MOV CL, OFFSET FIN-OFFSET MSJ
 PLL:IN AL, PIO
     AND AL, 1
-    JNZ PLL            ;si el bit busy esta en 1
+    JNZ PLL             ;si el bit busy esta en 1
     MOV AL, [BX]
-    OUT PIO+1, AL       ;puerto cb, salida
+    OUT PIO+1, AL       ;puerto PB, salida
     IN AL, PIO          ;PULSO 'STROBE'
     OR AL, 2            ;ponemos el strobe en 1
     OUT PIO, AL
